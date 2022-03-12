@@ -7,7 +7,7 @@ This plugin can control most of the media players (next, previous, play/pause)
 - ### Play/pause
 
 ### This is a plugin for [Macro Deck 2](https://github.com/SuchByte/Macro-Deck), it does NOT function as a standalone app
-<img height="64px" src="https://macrodeck.org/images/works_with_macrodeck2.png" />
+<img height="64px" src="https://macrodeck.org/images/macro_deck_2_official_plugin.png" />
 
 
 # Third party licenses
