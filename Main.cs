@@ -30,7 +30,7 @@ namespace MediaControls_Plugin
         public override string Description => "Pauses or resume the current track on a media player.";
         public override void Trigger(string clientId, ActionButton actionButton)
         {
-            new InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.MEDIA_PLAY_PAUSE);
+            new InputSimulator().Keyboard.KeyPress(VirtualKeyCode.MEDIA_PLAY_PAUSE);
         }
     }
 
@@ -40,7 +40,7 @@ namespace MediaControls_Plugin
         public override string Description => "Plays the next track on a media player.";
         public override void Trigger(string clientId, ActionButton actionButton)
         {
-            new InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.MEDIA_NEXT_TRACK);
+            new InputSimulator().Keyboard.KeyPress(VirtualKeyCode.MEDIA_NEXT_TRACK);
         }
     }
 
@@ -50,7 +50,7 @@ namespace MediaControls_Plugin
         public override string Description => "Plays the previous track on a media player.\n\r\n\rConfiguration: no";
         public override void Trigger(string clientId, ActionButton actionButton)
         {
-            new InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.MEDIA_PREV_TRACK);
+            new InputSimulator().Keyboard.KeyPress(VirtualKeyCode.MEDIA_PREV_TRACK);
         }
     }
 

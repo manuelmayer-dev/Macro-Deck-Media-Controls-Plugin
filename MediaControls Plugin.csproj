@@ -4,23 +4,13 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>MediaControls_Plugin</RootNamespace>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <Version>1.1.0</Version>
+    <Version>1.1.1</Version>
     <Authors>Macro Deck</Authors>
     <AssemblyName>Macro Deck Media Controls</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Plugin.xml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Plugin.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="H.InputSimulator" Version="1.1.0" />
+    <PackageReference Include="H.InputSimulator" Version="1.2.6" />
     <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
   </ItemGroup>
 
