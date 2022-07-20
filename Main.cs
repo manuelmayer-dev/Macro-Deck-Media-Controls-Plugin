@@ -58,7 +58,7 @@ namespace MediaControls_Plugin
     }
     public class MediaVolUpAction : PluginAction
     {
-        public override string Name => "Media VolUp";
+        public override string Name => "Media Volume Up";
         public override string Description => "Increase volume on a media player.\n\r\n\rConfiguration: no";
         public override void Trigger(string clientId, ActionButton actionButton)
         {
@@ -67,7 +67,7 @@ namespace MediaControls_Plugin
     }
     public class MediaVolDownAction : PluginAction
     {
-        public override string Name => "Media VolDown";
+        public override string Name => "Media Volume Down";
         public override string Description => "Decrease volume on a media player.\n\r\n\rConfiguration: no";
         public override void Trigger(string clientId, ActionButton actionButton)
         {
@@ -76,7 +76,7 @@ namespace MediaControls_Plugin
     }
     public class MediaVolMuteAction : PluginAction
     {
-        public override string Name => "Media VolMute";
+        public override string Name => "Media Volume Mute";
         public override string Description => "Mute volume on a media player.\n\r\n\rConfiguration: no";
         public override void Trigger(string clientId, ActionButton actionButton)
         {
