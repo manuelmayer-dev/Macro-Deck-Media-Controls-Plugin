@@ -16,12 +16,12 @@
 
   <ItemGroup>
     <Reference Include="Macro Deck 2">
-      <HintPath>C:\Program Files\Macro Deck\Macro Deck 2.dll</HintPath>
+      <HintPath>..\Macro-Deck\bin\Release\netcoreapp3.1\publish\Macro Deck 2.dll</HintPath>
     </Reference>
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy /Y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;C:\Users\Manuel\AppData\Roaming\Macro Deck\plugins\SuchByte.MacroDeckMediaControls\$(TargetName).dll&quot;" />
+    <Exec Command="copy /Y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;C:\Users\Milen\AppData\Roaming\Macro Deck\plugins\SuchByte.MacroDeckMediaControls\$(TargetName).dll&quot;" />
   </Target>
 
 </Project>

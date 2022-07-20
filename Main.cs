@@ -20,6 +20,9 @@ namespace MediaControls_Plugin
                 new MediaPlayPauseAction(),
                 new MediaNextAction(),
                 new MediaPrevAction(),
+                new MediaVolUpAction(),
+                new MediaVolDownAction(),
+                new MediaVolMuteAction(),
             };
         }
     }
@@ -53,6 +56,31 @@ namespace MediaControls_Plugin
             new InputSimulator().Keyboard.KeyPress(VirtualKeyCode.MEDIA_PREV_TRACK);
         }
     }
-
-
+    public class MediaVolUpAction : PluginAction
+    {
+        public override string Name => "Media VolUp";
+        public override string Description => "Increase volume on a media player.\n\r\n\rConfiguration: no";
+        public override void Trigger(string clientId, ActionButton actionButton)
+        {
+            new InputSimulator().Keyboard.KeyPress(VirtualKeyCode.VOLUME_UP);
+        }
+    }
+    public class MediaVolDownAction : PluginAction
+    {
+        public override string Name => "Media VolDown";
+        public override string Description => "Decrease volume on a media player.\n\r\n\rConfiguration: no";
+        public override void Trigger(string clientId, ActionButton actionButton)
+        {
+            new InputSimulator().Keyboard.KeyPress(VirtualKeyCode.VOLUME_DOWN);
+        }
+    }
+    public class MediaVolMuteAction : PluginAction
+    {
+        public override string Name => "Media VolMute";
+        public override string Description => "Mute volume on a media player.\n\r\n\rConfiguration: no";
+        public override void Trigger(string clientId, ActionButton actionButton)
+        {
+            new InputSimulator().Keyboard.KeyPress(VirtualKeyCode.VOLUME_MUTE);
+        }
+    }
 }
