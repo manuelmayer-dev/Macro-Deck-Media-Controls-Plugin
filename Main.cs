@@ -1,18 +1,17 @@
-﻿using SuchByte.MacroDeck;
-using SuchByte.MacroDeck.ActionButton;
-using SuchByte.MacroDeck.GUI;
-using SuchByte.MacroDeck.GUI.CustomControls;
-using SuchByte.MacroDeck.Plugins;
-using System;
+﻿using SuchByte.MacroDeck.Plugins;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Reflection;
+using System;
 using WindowsInput;
+using System.Timers;
+using System.Threading.Tasks;
+using SuchByte.MacroDeck.ActionButton;
+using SuchByte.MacroDeck.Variables;
 
 namespace MediaControls_Plugin
 {
     public class MediaControlsPlugin : MacroDeckPlugin
     {
+        Timer timeDateTimer;
         public override void Enable()
         {
             this.Actions = new List<PluginAction>
@@ -24,9 +23,34 @@ namespace MediaControls_Plugin
                 new MediaVolDownAction(),
                 new MediaVolMuteAction(),
             };
+
+            this.timeDateTimer = new Timer(1000)
+            {
+                Enabled = true
+            };
+            this.timeDateTimer.Elapsed += this.OnTimerTick;
+            this.timeDateTimer.Start();
+        }
+        private void OnTimerTick(object sender, EventArgs e)
+        {
+            Task.Run(() =>
+            {
+                GetVolumeLevel();
+            });
+        }
+
+        private void GetVolumeLevel()
+        {
+            try
+            {
+                //Getting audio level and converting it to integer
+                VariableManager.SetValue("VolumeLevel", (int)AudioManager.GetMasterVolume(), VariableType.String, this, null);
+            }catch
+            {
+                VariableManager.SetValue("VolumeLevel", "err", VariableType.String, this, null);
+            }
         }
     }
-
     public class MediaPlayPauseAction : PluginAction
     {
         public override string Name => "Media Play/Pause";
@@ -84,3 +108,4 @@ namespace MediaControls_Plugin
         }
     }
 }
+
