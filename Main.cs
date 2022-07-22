@@ -44,7 +44,7 @@ namespace MediaControls_Plugin
             try
             {
                 //Getting audio level and converting it to integer
-                VariableManager.SetValue("VolumeLevel", (int)AudioManager.GetMasterVolume(), VariableType.String, this, null);
+                VariableManager.SetValue("VolumeLevel", Math.Round(AudioManager.GetMasterVolume()), VariableType.String, this, null);
             }catch
             {
                 VariableManager.SetValue("VolumeLevel", "err", VariableType.String, this, null);
