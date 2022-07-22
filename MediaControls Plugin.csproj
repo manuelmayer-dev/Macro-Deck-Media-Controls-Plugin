@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="H.InputSimulator" Version="1.2.6" />
+    <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.22621.1" />
     <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
   </ItemGroup>
 

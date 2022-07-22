@@ -6,13 +6,16 @@ using System.Timers;
 using System.Threading.Tasks;
 using SuchByte.MacroDeck.ActionButton;
 using SuchByte.MacroDeck.Variables;
+using Windows.Media.Control;
 
 namespace MediaControls_Plugin
 {
     public class MediaControlsPlugin : MacroDeckPlugin
     {
+        private GlobalSystemMediaTransportControlsSessionManager _manager = null;
+        private GlobalSystemMediaTransportControlsSession _session = null;
         Timer timeDateTimer;
-        public override void Enable()
+        public override async void Enable()
         {
             this.Actions = new List<PluginAction>
             {
@@ -24,6 +27,13 @@ namespace MediaControls_Plugin
                 new MediaVolMuteAction(),
             };
 
+            _manager = await GlobalSystemMediaTransportControlsSessionManager.RequestAsync();
+            if (_manager != null)
+            {
+                _manager.SessionsChanged += Manager_SessionsChanged;
+            }
+            Manager_SessionsChanged(null, null);
+
             this.timeDateTimer = new Timer(1000)
             {
                 Enabled = true
@@ -31,12 +41,53 @@ namespace MediaControls_Plugin
             this.timeDateTimer.Elapsed += this.OnTimerTick;
             this.timeDateTimer.Start();
         }
+        private void Manager_SessionsChanged(GlobalSystemMediaTransportControlsSessionManager sender, SessionsChangedEventArgs args)
+        {
+            if (_manager != null)
+            {
+                _session = _manager.GetCurrentSession();
+                if (_session != null)
+                {
+                    GetCurrentPlayingTittleAsync(null, null);
+                }
+            }
+            else
+            {
+                _session = null;
+            }
+        }
         private void OnTimerTick(object sender, EventArgs e)
         {
             Task.Run(() =>
             {
                 GetVolumeLevel();
+                GetCurrentPlayingTittleAsync(null, null);
             });
+        }
+        async void GetCurrentPlayingTittleAsync(GlobalSystemMediaTransportControlsSession sender, MediaPropertiesChangedEventArgs args)
+        {
+            try
+            {
+                if (_session != null)
+                {
+                    try
+                    {
+                        var info = await _session.TryGetMediaPropertiesAsync();
+                        if (info != null)
+                        {
+                            VariableManager.SetValue("CurrentPlayingTittle", info.Title, VariableType.String, this, null);
+                        }
+                    }
+                    catch
+                    {
+
+                        VariableManager.SetValue("CurrentPlayingTittle", "err", VariableType.String, this, null);
+                    }
+                }
+            }
+            catch
+            {
+            }
         }
 
         private void GetVolumeLevel()
