@@ -1,17 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <RootNamespace>MediaControls_Plugin</RootNamespace>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <Version>1.1.1</Version>
+    <Version>1.2.0</Version>
     <Authors>Macro Deck</Authors>
     <AssemblyName>Macro Deck Media Controls</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="H.InputSimulator" Version="1.2.6" />
-    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
+    <PackageReference Include="H.InputSimulator" Version="1.4.0" />
+    <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
