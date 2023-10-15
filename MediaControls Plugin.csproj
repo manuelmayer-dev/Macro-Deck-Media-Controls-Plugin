@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net7.0-windows10.0.19041.0</TargetFramework>
     <RootNamespace>MediaControls_Plugin</RootNamespace>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <Version>1.2.0</Version>
@@ -11,12 +11,13 @@
 
   <ItemGroup>
     <PackageReference Include="H.InputSimulator" Version="1.4.0" />
-    <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.22621.1" />
   </ItemGroup>
-
+  
   <ItemGroup>
     <Reference Include="Macro Deck 2">
-      <HintPath>..\Macro-Deck\bin\Release\netcoreapp3.1\publish\Macro Deck 2.dll</HintPath>
+      <HintPath>C:\Program Files\Macro Deck\Macro Deck 2.dll</HintPath>
+      <EmbedInteropTypes>false</EmbedInteropTypes>
+      <Private>false</Private>
     </Reference>
   </ItemGroup>
 
