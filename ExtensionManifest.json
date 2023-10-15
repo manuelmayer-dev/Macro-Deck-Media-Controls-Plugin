@@ -2,9 +2,10 @@
   "type": "Plugin",
   "name": "Macro Deck Media Controls",
   "author": "Macro Deck",
-  "repository": "https://github.com/SuchByte/Macro-Deck-Media-Controls-Plugin",
+  "repository": "https://github.com/manuelmayer-dev/Macro-Deck-Media-Controls-Plugin",
   "packageId": "SuchByte.MediaControls",
   "version": "1.2.0",
   "target-plugin-api-version": 40,
+  "target-macro-deck-version": "2.13.0-b9",
   "dll": "Macro Deck Media Controls.dll"
 }
