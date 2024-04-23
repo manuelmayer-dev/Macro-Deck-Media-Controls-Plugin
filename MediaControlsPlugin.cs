@@ -13,7 +13,7 @@ public class MediaControlsPlugin : MacroDeckPlugin
     private GlobalSystemMediaTransportControlsSessionManager _manager;
     private GlobalSystemMediaTransportControlsSession _session;
     private Timer _timeDateTimer;
-        
+
     public override async void Enable()
     {
         Actions = new List<PluginAction>
@@ -35,17 +35,18 @@ public class MediaControlsPlugin : MacroDeckPlugin
         _timeDateTimer.Elapsed += OnTimerTick;
         _timeDateTimer.Start();
     }
-    
+
     private async void Manager_SessionsChanged(
         GlobalSystemMediaTransportControlsSessionManager sender,
         SessionsChangedEventArgs args)
     {
         await UpdateSession();
     }
-    
+
     private async void OnTimerTick(object sender, EventArgs e)
     {
         UpdateVolumeLevel();
+        UpdateVolumeMuteState();
         await UpdatePlayingTitleAsync();
     }
 
@@ -82,7 +83,7 @@ public class MediaControlsPlugin : MacroDeckPlugin
         {
             return;
         }
-            
+
         var currentTile = string.Empty;
         var currentArtist = string.Empty;
 
@@ -117,6 +118,23 @@ public class MediaControlsPlugin : MacroDeckPlugin
         finally
         {
             VariableManager.SetValue("volume_level", volume, VariableType.Integer, this, null);
+        }
+    }
+
+    private void UpdateVolumeMuteState()
+    {
+        var isMuted = false;
+        try
+        {
+            isMuted = AudioManager.GetMasterVolumeMute();
+        }
+        catch
+        {
+            isMuted = false;
+        }
+        finally
+        {
+            VariableManager.SetValue("volume_muted", isMuted, VariableType.Bool, this, null);
         }
     }
 }

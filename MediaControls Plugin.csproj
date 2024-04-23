@@ -4,7 +4,7 @@
     <TargetFramework>net7.0-windows10.0.19041.0</TargetFramework>
     <RootNamespace>MediaControls_Plugin</RootNamespace>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <Version>1.2.0</Version>
+    <Version>1.3.0</Version>
     <Authors>Macro Deck</Authors>
     <AssemblyName>Macro Deck Media Controls</AssemblyName>
   </PropertyGroup>
@@ -12,7 +12,7 @@
   <ItemGroup>
     <PackageReference Include="H.InputSimulator" Version="1.4.0" />
   </ItemGroup>
-  
+	
   <ItemGroup>
     <Reference Include="Macro Deck 2">
       <HintPath>C:\Program Files\Macro Deck\Macro Deck 2.dll</HintPath>
