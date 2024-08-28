@@ -15,14 +15,7 @@ public class MediaLoopTrack : PluginAction
 
     public MediaLoopTrack()
     {
-        if (PluginManager.Plugins.ContainsKey("Macro Deck Media Controls"))
-        {
-            MacroDeckPlugin plugin = PluginManager.Plugins["Macro Deck Media Controls"];
-            if (plugin.GetType().IsEquivalentTo(typeof(MediaControlsPlugin)))
-            {
-                _manager = ((MediaControlsPlugin)plugin).Manager;
-            }
-        }
+        _manager = MediaControlsPlugin.Manager;
     }
     public override string Name => "Media Loop Track";
     public override string Description => "Turns on looping for the current track on a media player.\n\r\n\rConfiguration: no";
@@ -33,6 +26,6 @@ public class MediaLoopTrack : PluginAction
         {
             return;
         }
-        var test = Task.Run(async () => await session.TryChangeAutoRepeatModeAsync(MediaPlaybackAutoRepeatMode.Track)).GetAwaiter().GetResult();
+        Task.Run(async () => await session.TryChangeAutoRepeatModeAsync(MediaPlaybackAutoRepeatMode.Track));
     }
 }

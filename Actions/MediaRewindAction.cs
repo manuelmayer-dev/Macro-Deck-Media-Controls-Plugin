@@ -14,14 +14,7 @@ public class MediaRewindAction : PluginAction
 
     public MediaRewindAction()
     {
-        if (PluginManager.Plugins.ContainsKey("Macro Deck Media Controls"))
-        {
-            MacroDeckPlugin plugin = PluginManager.Plugins["Macro Deck Media Controls"];
-            if (plugin.GetType().IsEquivalentTo(typeof(MediaControlsPlugin)))
-            {
-                _manager = ((MediaControlsPlugin)plugin).Manager;
-            }
-        }
+        _manager = MediaControlsPlugin.Manager;
     }
     public override string Name => "Media Rewind";
     public override string Description => "Rewinds the current track on a media player.\n\r\n\rConfiguration: no";
@@ -32,6 +25,6 @@ public class MediaRewindAction : PluginAction
         {
             return;
         }
-        var test = Task.Run(async () => await session.TryRewindAsync()).GetAwaiter().GetResult();
+        Task.Run(async () => await session.TryRewindAsync());
     }
 }

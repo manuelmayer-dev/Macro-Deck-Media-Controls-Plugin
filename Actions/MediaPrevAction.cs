@@ -14,14 +14,7 @@ public class MediaPrevAction : PluginAction
 
     public MediaPrevAction()
     {
-        if (PluginManager.Plugins.ContainsKey("Macro Deck Media Controls"))
-        {
-            MacroDeckPlugin plugin = PluginManager.Plugins["Macro Deck Media Controls"];
-            if (plugin.GetType().IsEquivalentTo(typeof(MediaControlsPlugin)))
-            {
-                _manager = ((MediaControlsPlugin)plugin).Manager;
-            }
-        }
+        _manager = MediaControlsPlugin.Manager;
     }
     public override string Name => "Media Prev";
     public override string Description => "Plays the previous track on a media player.\n\r\n\rConfiguration: no";
@@ -32,6 +25,7 @@ public class MediaPrevAction : PluginAction
         {
             return;
         }
-        var test = Task.Run(async () => await session.TrySkipPreviousAsync()).GetAwaiter().GetResult();
+
+        Task.Run(async () => await session.TrySkipPreviousAsync());
     }
 }

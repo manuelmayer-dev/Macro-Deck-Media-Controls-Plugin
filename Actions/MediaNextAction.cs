@@ -14,14 +14,7 @@ public class MediaNextAction : PluginAction
 
     public MediaNextAction()
     {
-        if (PluginManager.Plugins.ContainsKey("Macro Deck Media Controls"))
-        {
-            MacroDeckPlugin plugin = PluginManager.Plugins["Macro Deck Media Controls"];
-            if (plugin.GetType().IsEquivalentTo(typeof(MediaControlsPlugin)))
-            {
-                _manager = ((MediaControlsPlugin)plugin).Manager;
-            }
-        }
+        _manager = MediaControlsPlugin.Manager;
     }
     public override string Name => "Media Next";
     public override string Description => "Plays the next track on a media player.";
@@ -32,6 +25,7 @@ public class MediaNextAction : PluginAction
         {
             return;
         }
-        var test = Task.Run(async () => await session.TrySkipNextAsync()).GetAwaiter().GetResult();
+
+        Task.Run(async () => await session.TrySkipNextAsync());
     }
 }

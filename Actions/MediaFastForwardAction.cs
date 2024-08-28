@@ -14,14 +14,7 @@ public class MediaFastForwardAction : PluginAction
 
     public MediaFastForwardAction()
     {
-        if (PluginManager.Plugins.ContainsKey("Macro Deck Media Controls"))
-        {
-            MacroDeckPlugin plugin = PluginManager.Plugins["Macro Deck Media Controls"];
-            if (plugin.GetType().IsEquivalentTo(typeof(MediaControlsPlugin)))
-            {
-                _manager = ((MediaControlsPlugin)plugin).Manager;
-            }
-        }
+        _manager = MediaControlsPlugin.Manager;
     }
     public override string Name => "Media Fast Forward";
     public override string Description => "Fast forwards the current track on a media player.\n\r\n\rConfiguration: no";
@@ -31,7 +24,7 @@ public class MediaFastForwardAction : PluginAction
         if (session == null)
         {
             return;
-        }
-        var test = Task.Run(async () => await session.TryFastForwardAsync()).GetAwaiter().GetResult();
+        } 
+        Task.Run(async () => await session.TryFastForwardAsync());
     }
 }

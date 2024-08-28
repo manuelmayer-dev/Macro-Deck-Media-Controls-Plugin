@@ -12,7 +12,7 @@ namespace MediaControls_Plugin;
 
 public class MediaControlsPlugin : MacroDeckPlugin
 {
-    public GlobalSystemMediaTransportControlsSessionManager Manager;
+    public static GlobalSystemMediaTransportControlsSessionManager Manager;
     private GlobalSystemMediaTransportControlsSession _session;
     private Timer _timeDateTimer;
 
@@ -36,8 +36,7 @@ public class MediaControlsPlugin : MacroDeckPlugin
             new MediaVolMuteAction(),
             new MediaFastForwardAction(),
             new MediaRewindAction(),
-            new MediaShuffleOn(),
-            new MediaShuffleOff(),
+            new MediaShuffleToggle(),
             new MediaLoopOff(),
             new MediaLoopList(),
             new MediaLoopTrack(),
@@ -117,7 +116,7 @@ public class MediaControlsPlugin : MacroDeckPlugin
         finally
         {
             VariableManager.SetValue("is_playing", isPlaying, VariableType.Bool, this, null!);
-            VariableManager.SetValue("is_shuffle", shuffle, VariableType.Bool, this, null!);
+            VariableManager.SetValue("is_shuffled", shuffle, VariableType.Bool, this, null!);
             VariableManager.SetValue("playback_status", (int) playbackStatus, VariableType.Integer, this, null!);
             VariableManager.SetValue("loop_status", (int) loop, VariableType.Integer, this, null!);
         }

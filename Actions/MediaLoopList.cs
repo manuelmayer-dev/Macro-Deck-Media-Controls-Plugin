@@ -15,14 +15,7 @@ public class MediaLoopList : PluginAction
 
     public MediaLoopList()
     {
-        if (PluginManager.Plugins.ContainsKey("Macro Deck Media Controls"))
-        {
-            MacroDeckPlugin plugin = PluginManager.Plugins["Macro Deck Media Controls"];
-            if (plugin.GetType().IsEquivalentTo(typeof(MediaControlsPlugin)))
-            {
-                _manager = ((MediaControlsPlugin)plugin).Manager;
-            }
-        }
+        _manager = MediaControlsPlugin.Manager;
     }
     
     public override string Name => "Media Loop List";
@@ -34,6 +27,6 @@ public class MediaLoopList : PluginAction
         {
             return;
         }
-        var test = Task.Run(async () => await session.TryChangeAutoRepeatModeAsync(MediaPlaybackAutoRepeatMode.List)).GetAwaiter().GetResult();
+        Task.Run(async () => await session.TryChangeAutoRepeatModeAsync(MediaPlaybackAutoRepeatMode.List));
     }
 }
