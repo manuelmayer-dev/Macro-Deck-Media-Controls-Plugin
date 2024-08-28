@@ -8,11 +8,11 @@ using SuchByte.MacroDeck.Plugins;
 // ReSharper disable once CheckNamespace
 namespace MediaControls_Plugin; // Don't change because of compatibility
 
-public class MediaPrevAction : PluginAction
+public class MediaShuffleOff : PluginAction
 {
     private GlobalSystemMediaTransportControlsSessionManager _manager;
 
-    public MediaPrevAction()
+    public MediaShuffleOff()
     {
         if (PluginManager.Plugins.ContainsKey("Macro Deck Media Controls"))
         {
@@ -23,8 +23,8 @@ public class MediaPrevAction : PluginAction
             }
         }
     }
-    public override string Name => "Media Prev";
-    public override string Description => "Plays the previous track on a media player.\n\r\n\rConfiguration: no";
+    public override string Name => "Media Shuffle Off";
+    public override string Description => "Turns off the shuffle for the current media player.\n\r\n\rConfiguration: no";
     public override void Trigger(string clientId, ActionButton actionButton)
     {
         var session = _manager.GetCurrentSession();
@@ -32,6 +32,6 @@ public class MediaPrevAction : PluginAction
         {
             return;
         }
-        var test = Task.Run(async () => await session.TrySkipPreviousAsync()).GetAwaiter().GetResult();
+        var test = Task.Run(async () => await session.TryChangeShuffleActiveAsync(false)).GetAwaiter().GetResult();
     }
 }

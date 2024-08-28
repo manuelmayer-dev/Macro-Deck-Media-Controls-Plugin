@@ -3,29 +3,21 @@ using System.Collections.Generic;
 using System;
 using System.Timers;
 using System.Threading.Tasks;
+using Windows.Media;
 using SuchByte.MacroDeck.Variables;
 using Windows.Media.Control;
+
 
 namespace MediaControls_Plugin;
 
 public class MediaControlsPlugin : MacroDeckPlugin
 {
-    private GlobalSystemMediaTransportControlsSessionManager _manager;
+    public GlobalSystemMediaTransportControlsSessionManager Manager;
     private GlobalSystemMediaTransportControlsSession _session;
     private Timer _timeDateTimer;
 
     public override async void Enable()
     {
-        Actions = new List<PluginAction>
-        {
-            new MediaPlayPauseAction(),
-            new MediaNextAction(),
-            new MediaPrevAction(),
-            new MediaVolUpAction(),
-            new MediaVolDownAction(),
-            new MediaVolMuteAction(),
-        };
-
         await InitializeSessionManager();
 
         _timeDateTimer = new Timer(1000)
@@ -34,6 +26,23 @@ public class MediaControlsPlugin : MacroDeckPlugin
         };
         _timeDateTimer.Elapsed += OnTimerTick;
         _timeDateTimer.Start();
+        Actions = new List<PluginAction>
+        {
+            new MediaPlayPauseAction(),
+            new MediaNextAction(),
+            new MediaPrevAction(),
+            new MediaVolUpAction(),
+            new MediaVolDownAction(),
+            new MediaVolMuteAction(),
+            new MediaFastForwardAction(),
+            new MediaRewindAction(),
+            new MediaShuffleOn(),
+            new MediaShuffleOff(),
+            new MediaLoopOff(),
+            new MediaLoopList(),
+            new MediaLoopTrack(),
+            
+        };
     }
 
     private async void Manager_SessionsChanged(
@@ -48,14 +57,15 @@ public class MediaControlsPlugin : MacroDeckPlugin
         UpdateVolumeLevel();
         UpdateVolumeMuteState();
         await UpdatePlayingTitleAsync();
+        await UpdatePlayerStateAsync();
     }
 
     private async Task InitializeSessionManager()
     {
-        _manager = await GlobalSystemMediaTransportControlsSessionManager.RequestAsync();
-        if (_manager != null)
+        Manager = await GlobalSystemMediaTransportControlsSessionManager.RequestAsync();
+        if (Manager != null)
         {
-            _manager.SessionsChanged += Manager_SessionsChanged;
+            Manager.SessionsChanged += Manager_SessionsChanged;
         }
 
         await UpdateSession();
@@ -63,12 +73,13 @@ public class MediaControlsPlugin : MacroDeckPlugin
 
     private async Task UpdateSession()
     {
-        if (_manager != null)
+        if (Manager != null)
         {
-            _session = _manager.GetCurrentSession();
+            _session = Manager.GetCurrentSession();
             if (_session != null)
             {
                 await UpdatePlayingTitleAsync();
+                await UpdatePlayerStateAsync();
             }
         }
         else
@@ -77,6 +88,41 @@ public class MediaControlsPlugin : MacroDeckPlugin
         }
     }
 
+    private async Task UpdatePlayerStateAsync()
+    {
+        if (_session == null)
+        {
+            return;
+        }
+
+        var isPlaying = false;
+        var playbackStatus = GlobalSystemMediaTransportControlsSessionPlaybackStatus.Closed;
+        var shuffle = false;
+        var loop = MediaPlaybackAutoRepeatMode.None;
+        
+        try
+        {
+            var info = await Task.Run(_session.GetPlaybackInfo);
+            playbackStatus = info?.PlaybackStatus ?? GlobalSystemMediaTransportControlsSessionPlaybackStatus.Closed;
+            isPlaying = playbackStatus == GlobalSystemMediaTransportControlsSessionPlaybackStatus.Playing;
+            shuffle = info?.IsShuffleActive ?? false;
+            loop = info?.AutoRepeatMode ?? MediaPlaybackAutoRepeatMode.None;
+        }
+        catch
+        {
+            isPlaying = shuffle = false;
+            playbackStatus = GlobalSystemMediaTransportControlsSessionPlaybackStatus.Closed;
+            loop = MediaPlaybackAutoRepeatMode.None;
+        }
+        finally
+        {
+            VariableManager.SetValue("is_playing", isPlaying, VariableType.Bool, this, null!);
+            VariableManager.SetValue("is_shuffle", shuffle, VariableType.Bool, this, null!);
+            VariableManager.SetValue("playback_status", (int) playbackStatus, VariableType.Integer, this, null!);
+            VariableManager.SetValue("loop_status", (int) loop, VariableType.Integer, this, null!);
+        }
+
+    }
     private async Task UpdatePlayingTitleAsync()
     {
         if (_session == null)
@@ -86,7 +132,7 @@ public class MediaControlsPlugin : MacroDeckPlugin
 
         var currentTile = string.Empty;
         var currentArtist = string.Empty;
-
+        
         try
         {
             var info = await _session.TryGetMediaPropertiesAsync();
@@ -99,8 +145,8 @@ public class MediaControlsPlugin : MacroDeckPlugin
         }
         finally
         {
-            VariableManager.SetValue("current_playing_title", currentTile, VariableType.String, this, null);
-            VariableManager.SetValue("current_playing_artist", currentArtist, VariableType.String, this, null);
+            VariableManager.SetValue("current_playing_title", currentTile, VariableType.String, this, null!);
+            VariableManager.SetValue("current_playing_artist", currentArtist, VariableType.String, this, null!);
         }
     }
 
@@ -117,7 +163,7 @@ public class MediaControlsPlugin : MacroDeckPlugin
         }
         finally
         {
-            VariableManager.SetValue("volume_level", volume, VariableType.Integer, this, null);
+            VariableManager.SetValue("volume_level", volume, VariableType.Integer, this, null!);
         }
     }
 
@@ -134,7 +180,7 @@ public class MediaControlsPlugin : MacroDeckPlugin
         }
         finally
         {
-            VariableManager.SetValue("volume_muted", isMuted, VariableType.Bool, this, null);
+            VariableManager.SetValue("volume_muted", isMuted, VariableType.Bool, this, null!);
         }
     }
 }
