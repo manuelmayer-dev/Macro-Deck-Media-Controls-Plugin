@@ -27,22 +27,22 @@ namespace MediaControls_Plugin
         public static IAudioEndpointVolume GetMasterVolumeObject(Direction dir)
         {
             IMMDeviceEnumerator deviceEnumerator = null;
-            IMMDevice speakers = null;
+            IMMDevice device = null;
             try
             {
                 deviceEnumerator = (IMMDeviceEnumerator)(new MMDeviceEnumerator());
-                deviceEnumerator.GetDefaultAudioEndpoint(dir.Flow, dir.Role, out speakers);
+                deviceEnumerator.GetDefaultAudioEndpoint(dir.Flow, dir.Role, out device);
 
                 Guid IID_IAudioEndpointVolume = typeof(IAudioEndpointVolume).GUID;
                 object o;
-                speakers.Activate(ref IID_IAudioEndpointVolume, 0, IntPtr.Zero, out o);
+                device.Activate(ref IID_IAudioEndpointVolume, 0, IntPtr.Zero, out o);
                 IAudioEndpointVolume masterVol = (IAudioEndpointVolume)o;
 
                 return masterVol;
             }
             finally
             {
-                if (speakers != null) Marshal.ReleaseComObject(speakers);
+                if (device != null) Marshal.ReleaseComObject(device);
                 if (deviceEnumerator != null) Marshal.ReleaseComObject(deviceEnumerator);
             }
         }
@@ -52,17 +52,17 @@ namespace MediaControls_Plugin
             IMMDeviceEnumerator deviceEnumerator = null;
             IAudioSessionEnumerator sessionEnumerator = null;
             IAudioSessionManager2 mgr = null;
-            IMMDevice speakers = null;
+            IMMDevice device = null;
             try
             {
                 // get the speakers (1st render + multimedia) device
                 deviceEnumerator = (IMMDeviceEnumerator)(new MMDeviceEnumerator());
-                deviceEnumerator.GetDefaultAudioEndpoint(dir.Flow, dir.Role, out speakers);
+                deviceEnumerator.GetDefaultAudioEndpoint(dir.Flow, dir.Role, out device);
 
                 // activate the session manager. we need the enumerator
                 Guid IID_IAudioSessionManager2 = typeof(IAudioSessionManager2).GUID;
                 object o;
-                speakers.Activate(ref IID_IAudioSessionManager2, 0, IntPtr.Zero, out o);
+                device.Activate(ref IID_IAudioSessionManager2, 0, IntPtr.Zero, out o);
                 mgr = (IAudioSessionManager2)o;
 
                 // enumerate sessions for on this device
@@ -101,7 +101,7 @@ namespace MediaControls_Plugin
             {
                 if (sessionEnumerator != null) Marshal.ReleaseComObject(sessionEnumerator);
                 if (mgr != null) Marshal.ReleaseComObject(mgr);
-                if (speakers != null) Marshal.ReleaseComObject(speakers);
+                if (device != null) Marshal.ReleaseComObject(device);
                 if (deviceEnumerator != null) Marshal.ReleaseComObject(deviceEnumerator);
             }
         }
