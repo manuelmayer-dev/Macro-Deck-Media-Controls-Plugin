@@ -8,11 +8,24 @@ using Windows.Media.Control;
 
 namespace MediaControls_Plugin;
 
+public static class PluginInstance
+{
+    public static MediaControlsPlugin Main;
+}
+
 public class MediaControlsPlugin : MacroDeckPlugin
 {
     private GlobalSystemMediaTransportControlsSessionManager _manager;
     private GlobalSystemMediaTransportControlsSession _session;
     private Timer _timeDateTimer;
+
+    private AudioManager SpeakerManager = new AudioManager(Mode.Speakers);
+    private AudioManager MicrophoneManager = new AudioManager(Mode.Microphone);
+
+    public MediaControlsPlugin()
+    {
+        PluginInstance.Main = this;
+    }
 
     public override async void Enable()
     {
@@ -24,11 +37,12 @@ public class MediaControlsPlugin : MacroDeckPlugin
             new MediaVolUpAction(),
             new MediaVolDownAction(),
             new MediaVolMuteAction(),
+            new MediaMicMuteAction(),
         };
 
         await InitializeSessionManager();
 
-        _timeDateTimer = new Timer(1000)
+        _timeDateTimer = new Timer(300)
         {
             Enabled = true
         };
@@ -106,35 +120,43 @@ public class MediaControlsPlugin : MacroDeckPlugin
 
     private void UpdateVolumeLevel()
     {
-        var volume = 0d;
+        var speakerVolume = 0d;
+        var micVolume = 0d;
         try
         {
-            volume = Math.Round(AudioManager.GetMasterVolume());
+            speakerVolume = Math.Round(SpeakerManager.GetMasterVolume());
+            micVolume = Math.Round(MicrophoneManager.GetMasterVolume());
         }
         catch
         {
-            volume = 0;
+            speakerVolume = 0;
+            micVolume = 0;
         }
         finally
         {
-            VariableManager.SetValue("volume_level", volume, VariableType.Integer, this, null);
+            VariableManager.SetValue("speaker_volume_level", speakerVolume, VariableType.Integer, this, null);
+            VariableManager.SetValue("mic_volume_level", micVolume, VariableType.Integer, this, null);
         }
     }
 
     private void UpdateVolumeMuteState()
     {
-        var isMuted = false;
+        var isSpeakerMuted = false;
+        var isMicMuted = false;
         try
         {
-            isMuted = AudioManager.GetMasterVolumeMute();
+            isSpeakerMuted = SpeakerManager.GetMasterVolumeMute();
+            isMicMuted = MicrophoneManager.GetMasterVolumeMute();
         }
         catch
         {
-            isMuted = false;
+            isSpeakerMuted = false;
+            isMicMuted = false;
         }
         finally
         {
-            VariableManager.SetValue("volume_muted", isMuted, VariableType.Bool, this, null);
+            VariableManager.SetValue("speaker_muted", isSpeakerMuted, VariableType.Bool, this, null);
+            VariableManager.SetValue("mic_muted", isMicMuted, VariableType.Bool, this, null);
         }
     }
 }
