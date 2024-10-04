@@ -20,9 +20,10 @@
       <Private>false</Private>
     </Reference>
   </ItemGroup>
-
+  
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="copy /Y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;%APPDATA%\Macro Deck\plugins\SuchByte.MediaControls\$(TargetName).dll&quot;" />
+    <Exec Command="&quot;C:\Program Files\Macro Deck\Macro Deck 2.exe&quot; --debug-console --log-level 1" />
   </Target>
 
 </Project>
